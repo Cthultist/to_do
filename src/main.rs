@@ -8,6 +8,7 @@ fn main() {
     println!("You're doing it!, {:?}", task1)
 }
 
+//todo add float point numbers to tasks for task nesting and possibly for ease of editing or removing tasks.
 #[derive(Debug)]
 struct Task {
     description: String,
