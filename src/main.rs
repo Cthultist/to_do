@@ -5,7 +5,7 @@ fn main() {
         description: String::from("Make Dinner"),
         state: TaskState::Incomplete,
     };
-    println!("You're doing it!, Task is {:?}", task1)
+    println!("You're doing it!, {:?}", task1)
 }
 
 #[derive(Debug)]
