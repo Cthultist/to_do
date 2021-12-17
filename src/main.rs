@@ -16,7 +16,7 @@ fn main() {
         let mut action = String::new();
         let mut task = String::new();
         let mut state = String::new();
-        let mut task_list: HashMap<&str, TaskState> = Task::new();
+        let mut task_list: HashMap<&str, TaskState> = HashMap::new();
 
         print!("Are you adding, removing or modifying a task? (add, rem, mod" );
         read(&mut action);
@@ -33,45 +33,55 @@ fn main() {
 
         if action == "add" {
             task.add.save(task);
-                match task.save() {
-                    Ok(_) => println!("Successfully Added"),
-                    Err(why) => println!("An Error Occurred: {} ", why),
-                }
+            match task.save() {
+                Ok(_) => println!("Successfully Added"),
+                Err(why) => println!("An Error Occurred: {} ", why),
             }
+            
         if action == "rem" {
-            task.rem(item);
-                match task.rem() {
-                    Ok(_) => println!("Task Successfully Removed"),
-                    Err(why) => println!("An Error Occurred: {} ", why),
-                }
+            task.rem(task);
+            match task.rem() {
+                Ok(_) => println!("Task Successfully Removed"),
+                Err(why) => println!("An Error Occurred: {} ", why),
+            }
             }
         if action == "mod" {
             task.change_state(item);
-                match task.change_state() {
-                    Ok(_) => println!("Task Successfully Modified"),
-                    Err(why) => println("Task Failed: {} ", why),
+            match task.change_state() {
+                Ok(_) => println!("Task Successfully Modified"),
+                Err(why) => println!("Task Failed: {} ", why),
                 }
+            }
         }
     }
 }
 
-//todo add float point numbers to tasks for task nesting and possibly for ease of editing or removing tasks.
 #[derive(Debug)]
 struct Task {
     map: HashMap<String, TaskState>
 }
 
 impl Task {
-    fn add(&mut self, key: String, state: TaskState) {
+    fn add(&mut self, key: String, state: enum) {
         self.map.insert(key, TaskState::Incomplete);
     }
     fn change_state(&mut self, input_key: String, input_state: TaskState) {
-        match self.get("key") {
-            Some(val) => self.update(key: input_key, state: input_state)
+        match self.get(input_key) {
+            Some(val) => self.update(input_key, input_state)
         }
     }
-    fn rem(&mut self, key: String)
-        match self.remove(key);
+    fn rem(&mut self, key: String) {
+        match self.get(key) {
+            self.insert(key) => self.remove(key),
+            _ => println!("Task doesn't exist"),
+        }
+    fn save(self) -> Result<(), std::io::Error> {
+        let mut content = String::new();
+        for (k, v) in self.map {
+            let record = format!("{}\t{}\n", k, v);
+            content.push_str(&record)
+        }
+        std::fs::write("db.txt", content)
 }
 
 #[derive(Debug)]
@@ -80,4 +90,3 @@ enum TaskState {
     InProgress,
     Complete,
 }
-
