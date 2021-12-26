@@ -62,7 +62,7 @@ struct Task {
 }
 
 impl Task {
-    fn add(&mut self, key: String, state: enum) {
+    fn add(&mut self, key: String, state: TaskState) {
         self.map.insert(key, TaskState::Incomplete);
     }
     fn change_state(&mut self, input_key: String, input_state: TaskState) {
