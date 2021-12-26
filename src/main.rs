@@ -75,6 +75,8 @@ impl Task {
             self.insert(key) => self.remove(key),
             _ => println!("Task doesn't exist"),
         }
+    }
+
     fn save(self) -> Result<(), std::io::Error> {
         let mut content = String::new();
         for (k, v) in self.map {
@@ -82,6 +84,7 @@ impl Task {
             content.push_str(&record)
         }
         std::fs::write("db.txt", content)
+    }
 }
 
 #[derive(Debug)]
