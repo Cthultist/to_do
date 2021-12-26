@@ -90,6 +90,14 @@ impl Task {
         }
         std::fs::write("db.txt", content)
     }
+
+    fn get(&mut self, k: &str) {
+        unimplemented!()
+    }
+
+    fn update(&mut self, k: &str, v: TaskState) {
+        unimplemented!()
+    }
 }
 
 #[derive(Debug)]
