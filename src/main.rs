@@ -1,11 +1,9 @@
-use std::io::{stdin, stdout, Write};
 use std::collections::HashMap;
+use std::io::{stdin, stdout, Write};
 
 fn read(input: &mut String) {
-    stdout().flush()
-        .expect("Failed to flush");
-    stdin().read_line(input)
-        .expect("Failed to read");
+    stdout().flush().expect("Failed to flush");
+    stdin().read_line(input).expect("Failed to read");
 }
 
 fn main() {
@@ -18,7 +16,7 @@ fn main() {
         let mut state = String::new();
         let mut task_list: HashMap<&str, TaskState> = HashMap::new();
 
-        print!("Are you adding, removing or modifying a task? (add, rem, mod" );
+        print!("Are you adding, removing or modifying a task? (add, rem, mod");
         read(&mut action);
 
         print!("What is the name of the Task? ");
@@ -37,19 +35,19 @@ fn main() {
                 Ok(_) => println!("Successfully Added"),
                 Err(why) => println!("An Error Occurred: {} ", why),
             }
-            
-        if action == "rem" {
-            task.rem(task);
-            match task.rem() {
-                Ok(_) => println!("Task Successfully Removed"),
-                Err(why) => println!("An Error Occurred: {} ", why),
+
+            if action == "rem" {
+                task.rem(task);
+                match task.rem() {
+                    Ok(_) => println!("Task Successfully Removed"),
+                    Err(why) => println!("An Error Occurred: {} ", why),
+                }
             }
-            }
-        if action == "mod" {
-            task.change_state(item);
-            match task.change_state() {
-                Ok(_) => println!("Task Successfully Modified"),
-                Err(why) => println!("Task Failed: {} ", why),
+            if action == "mod" {
+                task.change_state(item);
+                match task.change_state() {
+                    Ok(_) => println!("Task Successfully Modified"),
+                    Err(why) => println!("Task Failed: {} ", why),
                 }
             }
         }
@@ -58,7 +56,7 @@ fn main() {
 
 #[derive(Debug)]
 struct Task {
-    map: HashMap<String, TaskState>
+    map: HashMap<String, TaskState>,
 }
 
 impl Task {
@@ -67,13 +65,20 @@ impl Task {
     }
     fn change_state(&mut self, input_key: String, input_state: TaskState) {
         match self.get(input_key) {
-            Some(val) => self.update(input_key, input_state)
+            Some(val) => self.update(input_key, input_state),
+            None => {
+                // TODO: Put code to handle the None case here
+            }
         }
     }
     fn rem(&mut self, key: String) {
         match self.get(key) {
-            self.insert(key) => self.remove(key),
-            _ => println!("Task doesn't exist"),
+            Some(val) => {
+                // TODO: I'm not sure what you're trying to express here, so I've commented it out. The problem was that
+                // you didn't have a Some arm for the match expression. You had it up above, just not here.
+                //self.insert(key) => self.remove(key)
+            }
+            None => println!("Task doesn't exist"),
         }
     }
 
