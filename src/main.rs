@@ -85,7 +85,7 @@ impl Task {
     fn save(self) -> Result<(), std::io::Error> {
         let mut content = String::new();
         for (k, v) in self.map {
-            let record = format!("{}\t{}\n", k, v);
+            let record = format!("{}\t{:?}\n", k, v);
             content.push_str(&record)
         }
         std::fs::write("db.txt", content)
