@@ -1,6 +1,33 @@
 use std::collections::HashMap;
 use std::io::{stdin, stdout, Write};
+use std::str::FromStr;
 
+#[derive(Debug)]
+struct Task {
+    description: String,
+    state: TaskState,
+}
+
+impl Task {
+}
+#[derive(Debug)]
+enum TaskState {
+    Incomplete,
+    InProgress,
+    Complete,
+}
+impl std::str::FromStr for TaskState {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "complete" => Ok(TaskState::Complete),
+            "inprogress" => Ok(TaskState::InProgress),
+            "incomplete" => Ok(TaskState::Incomplete),
+            _ => Err(format!("'{}' is not a valid state", s)),
+        }
+    }
+}
 fn read(input: &mut String) {
     stdout().flush().expect("Failed to flush");
     stdin().read_line(input).expect("Failed to read");
@@ -12,97 +39,39 @@ fn main() {
 
     loop {
         let mut action = String::new();
-        let mut task = String::new();
+        let mut task_input = String::new();
         let mut state = String::new();
-        let mut task_list: HashMap<&str, TaskState> = HashMap::new();
+        let mut tasks = HashMap::<String, Task>::new();
 
-        print!("Are you adding, removing or modifying a task? (add, rem, mod");
+        print!("Are you adding, removing or modifying a task? (add, rem, mod)");
         read(&mut action);
 
         print!("What is the name of the Task? ");
-        read(&mut task);
+        read(&mut task_input);
 
         print!("What is the state of the task? i.e. Incomplete, InProgress, or Complete? ");
         read(&mut state);
 
-        let action: String = action.to_string();
-        let task: String = action.to_string();
-        let state: String = state.to_string();
-
-        if action == "add" {
-            task.add.save(task);
-            match task.save() {
-                Ok(_) => println!("Successfully Added"),
-                Err(why) => println!("An Error Occurred: {} ", why),
+        println!("this is the action: {}", action);
+        println!("this is the task name: {}", task_input);
+        println!("this is the state: {}", state);
+        if action.eq("add") || action.eq("mod") {
+            let task = Task {
+                description: task_input.clone(),
+                state: TaskState::from_str(&state).unwrap(),
+            };
+            tasks.insert(task_input, task);
+            //TODO: Print list of current tasks
+            //TODO: Print "Task successfully added"
+            for (key, value) in &tasks {
+                println!("{}: {:?}", key, value);
             }
-
-            if action == "rem" {
-                task.rem(task);
-                match task.rem() {
-                    Ok(_) => println!("Task Successfully Removed"),
-                    Err(why) => println!("An Error Occurred: {} ", why),
-                }
-            }
-            if action == "mod" {
-                task.change_state(item);
-                match task.change_state() {
-                    Ok(_) => println!("Task Successfully Modified"),
-                    Err(why) => println!("Task Failed: {} ", why),
-                }
-            }
+            println!("Task Successfully Added!");
+        } else if action.eq("rem") {
+            tasks.remove(&task_input.clone());
+            //TODO: Print list of current tasks
+            //TODO: print "Task successfully removed"
+            println!("Task Successfully Removed!");
         }
     }
-}
-
-#[derive(Debug)]
-struct Task {
-    map: HashMap<String, TaskState>,
-}
-
-impl Task {
-    fn add(&mut self, key: String, state: TaskState) {
-        self.map.insert(key, TaskState::Incomplete);
-    }
-    fn change_state(&mut self, input_key: String, input_state: TaskState) {
-        match self.get(input_key) {
-            Some(val) => self.update(input_key, input_state),
-            None => {
-                // TODO: Put code to handle the None case here
-            }
-        }
-    }
-    fn rem(&mut self, key: String) {
-        match self.get(key) {
-            Some(val) => {
-                // TODO: I'm not sure what you're trying to express here, so I've commented it out. The problem was that
-                // you didn't have a Some arm for the match expression. You had it up above, just not here.
-                //self.insert(key) => self.remove(key)
-            }
-            None => println!("Task doesn't exist"),
-        }
-    }
-
-    fn save(self) -> Result<(), std::io::Error> {
-        let mut content = String::new();
-        for (k, v) in self.map {
-            let record = format!("{}\t{:?}\n", k, v);
-            content.push_str(&record)
-        }
-        std::fs::write("db.txt", content)
-    }
-
-    fn get(&mut self, k: &str) {
-        unimplemented!()
-    }
-
-    fn update(&mut self, k: &str, v: TaskState) {
-        unimplemented!()
-    }
-}
-
-#[derive(Debug)]
-enum TaskState {
-    Incomplete,
-    InProgress,
-    Complete,
 }
