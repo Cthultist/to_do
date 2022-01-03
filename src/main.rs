@@ -8,8 +8,8 @@ struct Task {
     state: TaskState,
 }
 
-impl Task {
-}
+impl Task {}
+
 #[derive(Debug)]
 enum TaskState {
     Incomplete,
@@ -21,9 +21,9 @@ impl std::str::FromStr for TaskState {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "complete" => Ok(TaskState::Complete),
-            "inprogress" => Ok(TaskState::InProgress),
-            "incomplete" => Ok(TaskState::Incomplete),
+            "Complete" => Ok(TaskState::Complete),
+            "InProgress" => Ok(TaskState::InProgress),
+            "Incomplete" => Ok(TaskState::Incomplete),
             _ => Err(format!("'{}' is not a valid state", s)),
         }
     }
@@ -43,22 +43,28 @@ fn main() {
         let mut state = String::new();
         let mut tasks = HashMap::<String, Task>::new();
 
-        print!("Are you adding, removing or modifying a task? (add, rem, mod)");
+        print!("Are you adding, removing or modifying a task? (add, rem, mod): ");
         read(&mut action);
 
-        print!("What is the name of the Task? ");
+        print!("What is the name of the Task?: ");
         read(&mut task_input);
 
-        print!("What is the state of the task? i.e. Incomplete, InProgress, or Complete? ");
+        print!("What is the state of the task? i.e. Incomplete, InProgress, or Complete?: ");
         read(&mut state);
 
-        println!("this is the action: {}", action);
-        println!("this is the task name: {}", task_input);
-        println!("this is the state: {}", state);
-        if action.eq("add") || action.eq("mod") {
+        println!("this is the action: {}", action.trim());
+        println!("this is the task name: {}", task_input.trim());
+        println!("this is the state: {}", state.trim());
+
+        if action.trim() == "quit" {
+            panic!()
+        }
+        if action.trim() == "add" || action.trim() == "mod" {
+            let ts = state.trim();
+            let ti: String = task_input.trim().to_string();
             let task = Task {
-                description: task_input.clone(),
-                state: TaskState::from_str(&state).unwrap(),
+                description: ti,
+                state: TaskState::from_str(&ts).unwrap(),
             };
             tasks.insert(task_input, task);
             //TODO: Print list of current tasks
@@ -67,10 +73,13 @@ fn main() {
                 println!("{}: {:?}", key, value);
             }
             println!("Task Successfully Added!");
-        } else if action.eq("rem") {
+        } else if action.trim() == "rem" {
             tasks.remove(&task_input.clone());
             //TODO: Print list of current tasks
             //TODO: print "Task successfully removed"
+            for (key, value) in &tasks {
+                println!("{}: {:?}", key, value);
+            }
             println!("Task Successfully Removed!");
         }
     }
