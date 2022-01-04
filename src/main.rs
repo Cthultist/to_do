@@ -67,16 +67,12 @@ fn main() {
                 state: TaskState::from_str(&ts).unwrap(),
             };
             tasks.insert(task_input, task);
-            //TODO: Print list of current tasks
-            //TODO: Print "Task successfully added"
             for (key, value) in &tasks {
                 println!("{}: {:?}", key, value);
             }
             println!("Task Successfully Added!");
         } else if action.trim() == "rem" {
             tasks.remove(&task_input.clone());
-            //TODO: Print list of current tasks
-            //TODO: print "Task successfully removed"
             for (key, value) in &tasks {
                 println!("{}: {:?}", key, value);
             }
